@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>jipcam — 개선 요청</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;padding:0;font-family:'Inter','Noto Sans KR',system-ui,sans-serif}
+  *{box-sizing:border-box}
+  a{color:inherit}
+
+  .page{
+    min-height:100vh;
+    background:
+      radial-gradient(ellipse at 10% 0%, #F5D0FE 0%, transparent 50%),
+      radial-gradient(ellipse at 90% 20%, #FCE7F3 0%, transparent 55%),
+      radial-gradient(ellipse at 50% 80%, #E9D5FF 0%, transparent 60%),
+      #FDF9FF;
+    color:#0B0814;
+    padding:120px 64px 80px;
+  }
+
+  /* Nav (matches landing) */
+  .nav-wrap{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    padding:20px 0; display:flex; justify-content:center;
+    background:#fdf9ff; pointer-events:none;
+  }
+  .nav{
+    pointer-events:auto;
+    display:flex; align-items:center; gap:22px;
+    padding:8px 8px 8px 18px;
+    background:rgba(255,255,255,0.75);
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(11,8,20,0.08);
+    border-radius:999px;
+    box-shadow:0 1px 2px rgba(11,8,20,0.06), 0 8px 24px -12px rgba(192,38,211,0.15);
+    white-space:nowrap;
+  }
+  .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:#0B0814}
+  .nav-logo img{width:26px;height:26px}
+  .nav-logo span{font-weight:700;font-size:17px;letter-spacing:-0.02em}
+  .nav-sep{width:1px;height:16px;background:rgba(11,8,20,0.08)}
+  .nav-links{display:flex;gap:22px;font-size:13px;color:rgba(11,8,20,0.62)}
+  .nav-links a{text-decoration:none;color:inherit;transition:color 0.2s}
+  .nav-links a:hover{color:#C026D3}
+  .nav-links a.active{color:#C026D3}
+  .nav-links .faq-fix{display:inline-block;transform:translateY(3px)}
+  .nav-dl{
+    padding:10px 18px; background:#0B0814; color:#fff;
+    border-radius:14px; font-weight:600; font-size:13px;
+    text-decoration:none;
+  }
+
+  /* Header */
+  .container{max-width:880px;margin:0 auto}
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:6px 14px; background:rgba(255,255,255,0.7);
+    backdrop-filter:blur(12px);
+    border:1px solid rgba(11,8,20,0.08);
+    border-radius:999px;
+    font-family:'JetBrains Mono',ui-monospace,monospace;
+    font-size:11px; color:#C026D3; letter-spacing:0.06em; font-weight:600;
+  }
+  .eyebrow .dot{width:6px;height:6px;border-radius:999px;background:#C026D3;box-shadow:0 0 8px #C026D3}
+  h1{
+    margin:24px 0 22px;
+    font-size:clamp(48px, 7vw, 92px); font-weight:700;
+    letter-spacing:-0.045em; line-height:0.95;
+  }
+  .lede{
+    font-size:18px; line-height:1.65; color:rgba(11,8,20,0.65);
+    max-width:640px; margin:0 0 56px;
+  }
+
+  /* Intro card row */
+  .intro{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:14px;
+    margin-bottom:36px;
+  }
+  .intro-card{
+    background:rgba(255,255,255,0.65);
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(11,8,20,0.08);
+    border-radius:16px;
+    padding:22px;
+  }
+  .intro-card .num{
+    font-family:'JetBrains Mono',ui-monospace,monospace;
+    font-size:13px; color:#C026D3; font-weight:600;
+    letter-spacing:0.1em; margin-bottom:10px;
+  }
+  .intro-card .ttl{font-size:16px;font-weight:600;letter-spacing:-0.01em;margin-bottom:6px}
+  .intro-card .desc{font-size:13px;color:rgba(11,8,20,0.62);line-height:1.55}
+
+  /* Form card */
+  .form-card{
+    background:rgba(255,255,255,0.7);
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(11,8,20,0.08);
+    border-radius:24px;
+    box-shadow:0 40px 80px -20px rgba(192,38,211,0.18);
+    padding:8px;
+    overflow:hidden;
+  }
+  .form-card .inner{
+    border-radius:18px;
+    background:linear-gradient(180deg, rgba(255,255,255,0.7), rgba(255,255,255,0.5));
+    overflow:hidden;
+    padding:56px 48px;
+  }
+  .form-card .inner--iframe{
+    padding:0;
+    background:rgba(255,255,255,0.6);
+  }
+  .form-card iframe{
+    display:block; width:100%; min-height:780px; border:0; background:transparent;
+  }
+
+  /* Mail card */
+  .mailcard-head{
+    display:flex; align-items:center; gap:14px;
+    margin-bottom:8px;
+  }
+  .mailcard-head .glyph{
+    width:54px;height:54px;border-radius:16px;
+    background:linear-gradient(135deg,#F5D0FE,#FCE7F3);
+    display:grid;place-items:center;font-size:24px;
+    border:1px solid rgba(11,8,20,0.08);
+  }
+  .mailcard-head .ttl{font-size:24px;font-weight:600;letter-spacing:-0.02em}
+  .mailcard-head .sub{font-size:13px;color:rgba(11,8,20,0.6);margin-top:4px}
+
+  .mail-cta{
+    display:inline-flex;align-items:center;gap:12px;
+    padding:18px 28px;
+    background:#C026D3; color:#fff;
+    border-radius:14px; font-weight:600; font-size:16px;
+    text-decoration:none;
+    box-shadow:0 18px 36px -12px rgba(192,38,211,0.5);
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .mail-cta:hover{transform:translateY(-1px);box-shadow:0 22px 44px -12px rgba(192,38,211,0.6)}
+  .mail-cta .ic{font-size:18px}
+
+  .mail-row{
+    display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+    margin-top:18px;
+  }
+  .mail-meta{
+    font-family:'JetBrains Mono',ui-monospace,monospace;
+    font-size:12px; color:rgba(11,8,20,0.55);
+  }
+
+  .copy-block{
+    margin-top:36px;
+    padding-top:28px;
+    border-top:1px dashed rgba(11,8,20,0.12);
+  }
+  .copy-block .lbl{
+    font-family:'JetBrains Mono',ui-monospace,monospace;
+    font-size:11px; color:rgba(11,8,20,0.5);
+    letter-spacing:0.1em; font-weight:600;
+    margin-bottom:10px; text-transform:uppercase;
+  }
+  .copy-pill{
+    display:inline-flex;align-items:center;gap:10px;
+    padding:12px 16px;
+    background:rgba(255,255,255,0.8);
+    border:1px solid rgba(11,8,20,0.08);
+    border-radius:12px;
+    font-family:'JetBrains Mono',ui-monospace,monospace;
+    font-size:14px; color:#0B0814;
+    cursor:pointer; transition:all .15s ease;
+  }
+  .copy-pill:hover{border-color:#C026D3;background:#fff}
+  .copy-pill.copied{background:#C026D3;color:#fff;border-color:#C026D3}
+  .copy-pill .copy-ic{opacity:0.5;font-size:13px}
+  .copy-pill.copied .copy-ic{opacity:1}
+
+  .tips{
+    margin-top:36px;
+    padding:20px 22px;
+    background:rgba(192,38,211,0.05);
+    border:1px solid rgba(192,38,211,0.15);
+    border-radius:14px;
+  }
+  .tips .tlbl{
+    font-size:12px;font-weight:700;color:#C026D3;
+    letter-spacing:0.06em; margin-bottom:10px;
+    font-family:'JetBrains Mono',ui-monospace,monospace;
+  }
+  .tips ul{margin:0;padding-left:18px;font-size:14px;color:rgba(11,8,20,0.72);line-height:1.8}
+  .tips li::marker{color:#C026D3}
+
+  /* Side note */
+  .sidenote{
+    margin-top:32px;
+    padding:18px 22px;
+    background:rgba(255,255,255,0.5);
+    backdrop-filter:blur(12px);
+    border:1px solid rgba(11,8,20,0.08);
+    border-radius:14px;
+    display:flex; align-items:flex-start; gap:14px;
+    font-size:14px; color:rgba(11,8,20,0.7); line-height:1.65;
+  }
+  .sidenote .badge{
+    flex-shrink:0;
+    color:#C026D3; font-weight:700;
+  }
+
+  /* Footer */
+  footer{
+    margin-top:80px;
+    padding:32px 64px 40px;
+    border-top:1px solid rgba(11,8,20,0.08);
+  }
+  .foot{
+    max-width:1280px;margin:0 auto;
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;
+    font-family:'JetBrains Mono',ui-monospace,monospace;
+    font-size:12px; color:rgba(11,8,20,0.62);
+  }
+  .foot a{text-decoration:none;color:inherit}
+  .foot a.accent{color:#C026D3;font-weight:600}
+
+  @media (max-width:768px){
+    .page{padding:96px 18px 60px}
+    .nav-links,.nav-sep{display:none}
+    .nav{gap:10px;padding:6px 6px 6px 14px}
+    .nav-dl{padding:8px 14px;font-size:12px}
+    h1{font-size:clamp(36px,9vw,56px)}
+    .lede{font-size:15px;margin-bottom:36px}
+    .intro{grid-template-columns:1fr;gap:10px}
+    footer{padding:20px 18px 28px}
+    .foot{flex-direction:column;align-items:center;text-align:center}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Nav -->
+  <div class="nav-wrap">
+    <div class="nav">
+      <a class="nav-logo" href="index.html">
+        <img id="navIcon" alt="">
+        <span>jipcam</span>
+      </a>
+      <div class="nav-sep"></div>
+      <div class="nav-links">
+        <a href="index.html#features">기능</a>
+        <a href="index.html#usage">사용법</a>
+        <a href="index.html#workflow">워크플로우</a>
+        <a href="index.html#faq" class="faq-fix">FAQ</a>
+        <a href="feedback.html" class="active">개선 요청</a>
+      </div>
+      <a class="nav-dl" href="index.html">다운로드 ↗</a>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <div class="container">
+    <div class="eyebrow"><span class="dot"></span>FEEDBACK · jipcam을 더 낫게</div>
+    <h1>이렇게 됐으면<br>좋겠어요.</h1>
+    <p class="lede">
+      jipcam을 쓰면서 불편한 점, 추가됐으면 하는 기능, 작은 디테일까지.
+      메일로 보내주시면 직접 읽고 다음 업데이트에 반영합니다.
+    </p>
+
+    <!-- Intro 3 cards -->
+    <div class="intro">
+      <div class="intro-card">
+        <div class="num">01</div>
+        <div class="ttl">아이디어</div>
+        <div class="desc">"이런 기능이 있으면 좋겠어요" — 작은 것도 환영합니다.</div>
+      </div>
+      <div class="intro-card">
+        <div class="num">02</div>
+        <div class="ttl">불편함</div>
+        <div class="desc">버그, 어색한 동작, 헷갈리는 부분을 알려주세요.</div>
+      </div>
+      <div class="intro-card">
+        <div class="num">03</div>
+        <div class="ttl">짧아도 좋아요</div>
+        <div class="desc">한두 줄도 환영합니다. 떠오르는 대로 단편적으로 적어주세요.</div>
+      </div>
+    </div>
+
+    <!-- Form card -->
+    <div class="form-card">
+      <div class="inner inner--iframe">
+        <iframe
+          src="https://docs.google.com/forms/d/e/1FAIpQLSeMAWH7QLtkujSKCc4ZhgOcf6dZHBHXAT18qmYJvbMIzJqnbg/viewform?embedded=true"
+          width="100%" height="780" frameborder="0" marginheight="0" marginwidth="0"
+          title="jipcam 개선 요청">
+          로드 중…
+        </iframe>
+      </div>
+    </div>
+
+    <div class="sidenote">
+      <span class="badge">☑</span>
+      <div>
+        보내주신 의견은 모두 직접 읽고 분류해서, 다음 업데이트의 우선순위에 반영합니다.
+        답변이 필요하시면 폼에 이메일을 함께 적어주세요.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="foot">
+    <div style="display:flex;align-items:center;gap:8px">
+      <img id="footIcon" width="18" height="18" style="opacity:0.7" alt="">
+      <span>© 2026 jipcam · v1.0.3</span>
+    </div>
+    <div style="display:flex;gap:24px;flex-wrap:wrap;justify-content:center">
+      <a href="feedback.html">개선 요청</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Reuse the icon embedded in index.html if available; fallback to a transparent pixel.
+  // We re-fetch the parent landing's inline icon by reading sessionStorage if present,
+  // otherwise leave alt empty.
+  (function(){
+    var ICON = sessionStorage.getItem('__JIPCAM_ICON__');
+    if (!ICON) {
+      // Tiny fallback purple square logo
+      ICON = "data:image/svg+xml;utf8," + encodeURIComponent(
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#C026D3"/><rect x="8" y="11" width="16" height="11" rx="2" fill="white"/><circle cx="16" cy="16.5" r="3" fill="#C026D3"/></svg>'
+      );
+    }
+    document.getElementById('navIcon').src = ICON;
+    document.getElementById('footIcon').src = ICON;
+  })();
+
+</script>
+</body>
+</html>
