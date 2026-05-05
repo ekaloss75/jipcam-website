@@ -230,16 +230,8 @@
 </footer>
 
 <script>
-  (function(){
-    var ICON = sessionStorage.getItem('__JIPCAM_ICON__');
-    if (!ICON) {
-      ICON = "data:image/svg+xml;utf8," + encodeURIComponent(
-        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#C026D3"/><rect x="8" y="11" width="16" height="11" rx="2" fill="white"/><circle cx="16" cy="16.5" r="3" fill="#C026D3"/></svg>'
-      );
-    }
-    document.getElementById('navIcon').src = ICON;
-    document.getElementById('footIcon').src = ICON;
-  })();
+  document.getElementById('navIcon').src = 'assets/icon.png';
+  document.getElementById('footIcon').src = 'assets/icon.png';
 </script>
 </body>
 </html>
