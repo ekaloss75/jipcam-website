@@ -3717,7 +3717,7 @@ window.addEventListener('load', function() {
         while (el && el !== document.body) {
           var style = window.getComputedStyle(el);
           var pt = parseInt(style.paddingTop) || 0;
-          if (pt >= 40 && el.offsetWidth > 600) {
+          if (pt >= 40 && el.offsetWidth > 300) {
             return el;
           }
           el = el.parentElement;
